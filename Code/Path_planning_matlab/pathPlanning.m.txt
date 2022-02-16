@@ -1,0 +1,105 @@
+clc
+clear
+alph=1;
+u=1;
+xo2=8;
+yo2=8;
+ct=0.1;
+xc=0;
+yc=0;
+xt=10;
+yt=10;
+xo=2;
+yo=2;
+NTPS=10;
+the=0;
+step=360/NTPS;
+Jobs=alph.*exp(-u*((xc-xo)^2+(yc-yo)^2));
+Jtag=-alph.*exp(-u*((xc-xt)^2+(yc-yt)^2));
+Jnet=Jobs+Jtag;
+DTG=sqrt((xc-xt)^2+(yc-yt)^2);
+while xc+yc<=9.999
+for i=1:NTPS
+ the=the+(step);
+ xa(i)=xc+ct*cosd(the);
+ ya(i)=yc+ct*sind(the);
+ Jobsa(i)=alph.*exp(-u*((xa(i)-xo)^2+(ya(i)-yo)^2));
+ Jtaga(i)=-alph.*exp(-u*((xa(i)-xt)^2+(ya(i)-yt)^2));
+ DTGa(i)=sqrt((xa(i)-xt)^2+(ya(i)-yt)^2);
+ Jneta(i)=Jobsa(i)+Jtaga(i);
+ errj(i)=Jneta(i)-Jnet;
+ errd(i)=DTGa(i)-DTG;
+
+end
+errj;
+errd;
+for n=1:10
+ if(errj(n)<0 && errd(n)<0)
+ n;
+ break
+end
+end
+xc=xa(n);
+yc=ya(n);
+Jobs=alph.*exp(-u*((xc-xo)^2+(yc-yo)^2));
+Jtag=-alph.*exp(-u*((xc-xt)^2+(yc-yt)^2));
+Jnet=Jobs+Jtag;
+DTG=sqrt((xc-xt)^2+(yc-yt)^2);
+plot(xc,yc,'>')
+hold on
+plot(xt,yt,'*')
+hold on
+for th4=0:pi/50:2*pi
+xunit = u* cos(th4) + xo;
+yunit = u * sin(th4) + yo;
+h = plot(xunit, yunit,'+');
+end
+hold on
+plot(xa,ya,'r')
+hold on
+for th5=0:pi/50:2*pi
+xunit = u* cos(th5) + xo2;
+yunit = u * sin(th5) + yo2;
+h = plot(xunit, yunit,'>');
+end
+end
+
+
+NTPS2=10;
+the2=0;
+step2=360/NTPS2;
+Jobs2=alph.*exp(-u*((xc-xo2)^2+(yc-yo2)^2));
+Jtag2=-alph.*exp(-u*((xc-xt)^2+(yc-yt)^2));
+Jnet2=Jobs2+Jtag2;
+DTG2=sqrt((xc-xt)^2+(yc-yt)^2);
+while xc+yc<=9.999
+for i=1:NTPS2
+ the2=the2+(step2);
+ xa(i)=xc+ct*cosd(the2);
+ ya(i)=yc+ct*sind(the2);
+ Jobsa2(i)=alph.*exp(-u*((xa(i)-xo2)^2+(ya(i)-yo2)^2));
+ Jtaga2(i)=-alph.*exp(-u*((xa(i)-xt)^2+(ya(i)-yt)^2));
+ DTGa2(i)=sqrt((xa(i)-xt)^2+(ya(i)-yt)^2);
+ Jneta2(i)=Jobsa2(i)+Jtaga2(i);
+ errj2(i)=Jneta2(i)-Jnet2;
+ errd2(i)=DTGa2(i)-DTG2;
+
+end
+errj2;
+errd2;
+for n=1:10
+ if(errj2(n)<0 && errd2(n)<0)
+ n;
+ break
+end
+end
+xc=xa(n);
+yc=ya(n);
+Jobs2=alph.*exp(-u*((xc-xo2)^2+(yc-yo2)^2));
+Jtag2=-alph.*exp(-u*((xc-xt)^2+(yc-yt)^2));
+Jnet2=Jobs2+Jtag2;
+DTG2=sqrt((xc-xt)^2+(yc-yt)^2);
+plot(xa,ya,'r')
+end
+
+plot([xa(10) xt], [ya(10) yt],'r','LineWidth',2);
